@@ -20,7 +20,7 @@ app = FastAPI()
 #middleware
 cors_origins = [
     origin.strip().rstrip("/")
-    for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+    for origin in os.getenv("https://book-recommendation-system-3-engn.onrender.com/", "http://localhost:5173").split(",")
     if origin.strip()
 ]
 
