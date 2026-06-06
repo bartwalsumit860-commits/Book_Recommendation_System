@@ -1,8 +1,15 @@
-from fastapi import FastAPI,requests
+import os
+from pathlib import Path
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import pickle
 from pydantic import BaseModel
 import numpy as np
+
+BASE_DIR = Path(__file__).resolve().parent
+MODELS_DIR = BASE_DIR / "models"
+
 
 class BookRequest(BaseModel):
     book_name: str
@@ -11,20 +18,34 @@ class BookRequest(BaseModel):
 app = FastAPI()
 
 #middleware
+cors_origins = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-Popular_Books = pickle.load(open("models/Popular_Books", "rb"))
-pt = pickle.load(open("models/pt.pkl", "rb"))
-books = pickle.load(open("models/books.pkl", "rb"))
-similarity_scores = pickle.load(open("models/similarity_scores.pkl", "rb"))
-#api routes
 
-# @app.get("/")
+
+def load_pickle(filename: str):
+    with open(MODELS_DIR / filename, "rb") as file:
+        return pickle.load(file)
+
+
+# Load trained artifacts relative to this file so Render's working directory does not matter.
+Popular_Books = load_pickle("Popular_Books")
+pt = load_pickle("pt.pkl")
+books = load_pickle("books.pkl")
+similarity_scores = load_pickle("similarity_scores.pkl")
+
+
+@app.get("/")
 def home():
     return {"message":"server loaded successfully"}
 

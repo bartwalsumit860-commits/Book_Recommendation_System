@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Book from './Book';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import API_BASE_URL from '../api';
 const Books = () => {
   const [books,setBooks] = useState([]);
 
   useEffect(()=>{
     const fetchTopBooks= async ()=>{
       try {
-        const res = await axios.get('http://127.0.0.1:8000/popular');
+        const res = await axios.get(`${API_BASE_URL}/popular`);
         if(res){
           setBooks(res.data);
         }

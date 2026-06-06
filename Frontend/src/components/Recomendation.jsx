@@ -5,6 +5,7 @@ import { FcCancel } from "react-icons/fc";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import Book from "./Book";
+import API_BASE_URL from "../api";
 
 const Recomendation = () => {
   const [input, setInput] = useState({
@@ -36,7 +37,7 @@ const Recomendation = () => {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/recommendation",
+        `${API_BASE_URL}/recommendation`,
         {
           book_name: input.book_name,
         }
