@@ -19,7 +19,7 @@ app = FastAPI()
 
 #middleware
 cors_origins = [
-    origin.strip()
+    origin.strip().rstrip("/")
     for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
     if origin.strip()
 ]
