@@ -18,9 +18,10 @@ class BookRequest(BaseModel):
 app = FastAPI()
 
 #middleware
+default_cors_origins = "http://localhost:5173,https://book-recommendation-system-3-engn.onrender.com"
 cors_origins = [
     origin.strip().rstrip("/")
-    for origin in os.getenv("https://book-recommendation-system-3-engn.onrender.com/", "http://localhost:5173").split(",")
+    for origin in os.getenv("CORS_ORIGINS", default_cors_origins).split(",")
     if origin.strip()
 ]
 
